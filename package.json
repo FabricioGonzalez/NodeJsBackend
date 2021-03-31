@@ -1,0 +1,17 @@
+{
+	"name": "node-js-backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Fabricio Gonzalez França Ribeiro <fabriciogonzalezfr@gmail.com>",
+	"license": "MIT",
+	"type": "module",
+	"devDependencies": {
+		"@types/jest": "^26.0.22",
+		"jest": "^26.6.3"
+	},
+	"scripts": {
+		"test": "NODE_OPTIONS=--experimental-vm-modules yarn jest --colors",
+		"test:cov": "NODE_OPTIONS=--experimental-vm-modules yarn jest --coverage --json --colors",
+		"test:dev": "NODE_OPTIONS=--experimental-vm-modules yarn jest --watchAll --colors"
+	}
+}
