@@ -28,10 +28,7 @@
 		"test:dev": "NODE_OPTIONS=--experimental-vm-modules yarn jest --watchAll --colors"
 	},
 	"dependencies": {
-		"@nestjs/common": "^7.6.15",
-		"@nestjs/core": "^7.6.15",
-		"mongoose": "^5.12.2",
-		"reflect-metadata": "^0.1.13",
-		"rxjs": "^6.6.7"
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1"
 	}
 }

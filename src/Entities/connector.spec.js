@@ -1,4 +1,4 @@
-import Connector from '../Entities/connector.js';
+import Connector from './connector.js';
 
 describe('Testing connector entity', () => {
 

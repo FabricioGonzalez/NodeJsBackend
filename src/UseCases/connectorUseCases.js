@@ -34,16 +34,14 @@ export default class ConnectorUseCases {
 		return data;
 	}
 
-	update(data) {
+	update(connector) {
 		const validConnector = this.connector.validate();
 
 		if (validConnector.valid === false) {
 			throw new Error();
 		}
 
-		this.repository.update(data);
-
-		return data;
+		return this.repository.update(connector);
 	}
 
 	delete(id) {
@@ -52,8 +50,7 @@ export default class ConnectorUseCases {
 		if (validConnector.valid === false) {
 			throw new Error();
 		}
-		const data = this.repository.delete(id);
 
-		return data;
+		return this.repository.delete(id);
 	}
 }

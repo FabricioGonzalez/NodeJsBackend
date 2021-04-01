@@ -1,5 +1,5 @@
 import Connector from '../Entities/connector.js';
-import ConnectorUseCases from '../UseCases/connectorUseCases.js';
+import ConnectorUseCases from './connectorUseCases.js';
 import { jest } from '@jest/globals';
 
 describe('Connectors UseCases Test suite', () => {
@@ -231,13 +231,14 @@ describe('Connectors UseCases Test suite', () => {
 					];
 
 					const result = arr.map((item) => {
-						for (let i in item) {
+						for (const i in item) {
 							if (item[i] !== data[i]) {
 								item[i] = data[i];
 							}
-							return item;
 						}
+						return item;
 					});
+
 					return result;
 				}),
 			};
@@ -256,17 +257,19 @@ describe('Connectors UseCases Test suite', () => {
 
 			const connectorUseCases = new ConnectorUseCases(connector, repository);
 
-			const expected = {
-				id: 1,
-				Name: 'null',
-				Type: 'Rest',
-				Privacy: 'Private',
-				BaseURL: 'http://nov.com',
-				LogoURL: 'http://nov.com/logo',
-				Category: 'Business',
-				Description: 'Ola',
-				Status: 'available',
-			};
+			const expected = [
+				{
+					id: 1,
+					Name: 'null',
+					Type: 'Rest',
+					Privacy: 'Private',
+					BaseURL: 'http://nov.com',
+					LogoURL: 'http://nov.com/logo',
+					Category: 'Business',
+					Description: 'Ola',
+					Status: 'available',
+				},
+			];
 
 			expect(
 				connectorUseCases.update({
@@ -337,8 +340,6 @@ describe('Connectors UseCases Test suite', () => {
 					];
 
 					const result = data.filter((item) => (item ? item.id !== id : item));
-
-					console.log(result);
 					return result;
 				}),
 			};

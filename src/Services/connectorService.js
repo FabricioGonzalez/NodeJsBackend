@@ -1,6 +1,10 @@
+import { Injectable } from '@nestjs/common'
+
+@Injectable()
 export default class ConnectorService {
-	constructor(usecase, repository) {
+	constructor(usecase) {
 		this.connectorUsecase = usecase;
-		this.repository = repository;
 	}
+
+
 }
