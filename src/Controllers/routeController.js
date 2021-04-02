@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import JWT from './JWT/jwt';
+import AppFactory from 'src/Factory/appFactory';
+
 
 const jwt = new JWT();
 const router = Router();
@@ -39,7 +41,7 @@ const router = Router();
  *       "error": "NoAccessRight"
  *     }
  */
-router.get('/connector', (req, res) => {});
+router.get('/connector',(req, res) => {});
 
 /**
  *
