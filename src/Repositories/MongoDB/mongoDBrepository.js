@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export default class MongoDBRepository {
-  constructor(Model) {
-    this.model = Model;
+  constructor(ConnectorModel, ApplicationModel) {
+    this.model = ConnectorModel;
+    this.appModel = ApplicationModel;
   }
 
   async connect() {
@@ -59,10 +61,32 @@ export default class MongoDBRepository {
   async restore(id) {
     const data = await this.model.findByIdAndUpdate(
       id,
-
       { Status: 'available' },
       { new: true },
     );
     return { ok: true, data };
+  }
+
+  async generateKey(key, name) {
+    const rounds = 10;
+
+    const encripted = bcrypt.hashSync(key, rounds);
+
+    const obj = { Name: name, Key: encripted };
+
+    console.log(obj);
+
+    await this.appModel.create(obj);
+
+    return true;
+  }
+
+  async compareKey(id, key) {
+    const data = this.appModel.findById(id);
+    const result = bcrypt.compareSync(key, data.Key);
+
+    if (result == true) {
+      return { ok: true, data };
+    }
   }
 }

@@ -7,7 +7,7 @@ describe('Connectors UseCases Test suite', () => {
   describe('Insert Test Suite', () => {
     it('should throw an error while inserting invalid connector', () => {
       const repository = {
-        insert: jest.fn((obj) => {
+        save: jest.fn((obj) => {
           return true;
         }),
       };
@@ -23,14 +23,14 @@ describe('Connectors UseCases Test suite', () => {
         Status: 'available',
       });
 
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+      const connectorUseCases = new ConnectorUseCases(repository);
 
       expect(connectorUseCases.save).toThrowError();
     });
 
     it('should be successeful when trying to insert a valid connector', () => {
       const repository = {
-        insert: jest.fn((obj) => {
+        save: jest.fn((obj) => {
           return true;
         }),
       };
@@ -46,7 +46,7 @@ describe('Connectors UseCases Test suite', () => {
         Status: 'available',
       });
 
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+      const connectorUseCases = new ConnectorUseCases(repository);
 
       expect(connectorUseCases.save(connector).ok).toBe('Insert successed');
     });
@@ -85,18 +85,9 @@ describe('Connectors UseCases Test suite', () => {
           Status: 'available',
         },
       ];
-      const connector = new Connector({
-        id: 1,
-        Name: 'Nov',
-        Type: 'Rest',
-        Privacy: 'Private',
-        BaseURL: 'http://nov.com',
-        LogoURL: 'http://nov.com/logo',
-        Category: 'Business',
-        Description: 'null',
-        Status: 'available',
-      });
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+
+      const connectorUseCases = new ConnectorUseCases(repository);
+
       expect(connectorUseCases.listAll()).toEqual(expected);
     }),
       it('should be successeful when trying to filter by attribute', () => {
@@ -158,19 +149,8 @@ describe('Connectors UseCases Test suite', () => {
             });
           }),
         };
-        const connector = new Connector({
-          id: 1,
-          Name: 'Nov',
-          Type: 'Rest',
-          Privacy: 'Private',
-          BaseURL: 'http://nov.com',
-          LogoURL: 'http://nov.com/logo',
-          Category: 'Business',
-          Description: 'null',
-          Status: 'available',
-        });
 
-        const connectorUseCases = new ConnectorUseCases(connector, repository);
+        const connectorUseCases = new ConnectorUseCases(repository);
 
         const expected = [
           {
@@ -197,19 +177,7 @@ describe('Connectors UseCases Test suite', () => {
         update: jest.fn((data) => {}),
       };
 
-      const connector = new Connector({
-        id: 1,
-        Name: null,
-        Type: 'Rest',
-        Privacy: 'Private',
-        BaseURL: 'http://nov.com',
-        LogoURL: 'http://nov.com/logo',
-        Category: 'Business',
-        Description: 'null',
-        Status: 'available',
-      });
-
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+      const connectorUseCases = new ConnectorUseCases(repository);
 
       expect(connectorUseCases.update).toThrowError();
     });
@@ -242,20 +210,7 @@ describe('Connectors UseCases Test suite', () => {
           return result;
         }),
       };
-
-      const connector = new Connector({
-        id: 1,
-        Name: 'null',
-        Type: 'Rest',
-        Privacy: 'Private',
-        BaseURL: 'http://nov.com',
-        LogoURL: 'http://nov.com/logo',
-        Category: 'Business',
-        Description: 'null',
-        Status: 'available',
-      });
-
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+      const connectorUseCases = new ConnectorUseCases(repository);
 
       const expected = [
         {
@@ -349,18 +304,7 @@ describe('Connectors UseCases Test suite', () => {
           return result;
         }),
       };
-      const connector = new Connector({
-        id: 4,
-        Name: 'Nov',
-        Type: 'soap',
-        Privacy: 'Private',
-        BaseURL: 'http://nov.com',
-        LogoURL: 'http://nov.com/logo',
-        Category: 'Business',
-        Description: 'null',
-        Status: 'available',
-      });
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+      const connectorUseCases = new ConnectorUseCases(repository);
 
       const expected = [
         {
@@ -472,18 +416,8 @@ describe('Connectors UseCases Test suite', () => {
           return result;
         }),
       };
-      const connector = new Connector({
-        id: 4,
-        Name: 'Nov',
-        Type: 'soap',
-        Privacy: 'Private',
-        BaseURL: 'http://nov.com',
-        LogoURL: 'http://nov.com/logo',
-        Category: 'Business',
-        Description: 'null',
-        Status: 'available',
-      });
-      const connectorUseCases = new ConnectorUseCases(connector, repository);
+
+      const connectorUseCases = new ConnectorUseCases(repository);
 
       const expected = [
         {

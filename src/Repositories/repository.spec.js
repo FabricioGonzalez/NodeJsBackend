@@ -1,8 +1,9 @@
 import connectorModel from './MongoDB/Model/connectorModel.js';
+import appModel from './MongoDB/Model/appModel.js';
 import MongoDBRepository from './MongoDB/mongoDBrepository.js';
 
 const ConnectorModel = connectorModel;
-const MongoDB = new MongoDBRepository(ConnectorModel);
+const MongoDB = new MongoDBRepository(ConnectorModel, appModel);
 MongoDB.connect();
 
 describe('Repositories Tests Suite', () => {
@@ -64,6 +65,19 @@ describe('Repositories Tests Suite', () => {
             expect(data.ok).toBeTruthy();
           });
         });
+    });
+
+    describe('App Key Test', () => {
+      it('should generate a key', () => {
+        return MongoDB.generateKey('oi', 'key1234').then((data) => {
+          expect(data).toBeTruthy();
+        });
+      });
+      it('should compare key', () => {
+        return MongoDB.compareKey('606741b9f52f592134a257ee', 'key1234').then((data) => {
+          expect(data.ok).toBeTruthy();
+        });
+      });
     });
   });
 });

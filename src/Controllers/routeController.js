@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import JWT from './JWT/jwt';
-import AppFactory from 'src/Factory/appFactory';
-
+import JWT from './JWT/jwt.js';
+import AppFactory from '../Factory/appFactory.js';
 
 const jwt = new JWT();
 const router = Router();
+const appService = new AppFactory();
+const service = appService.factory();
 
 /**
  *
@@ -41,7 +42,12 @@ const router = Router();
  *       "error": "NoAccessRight"
  *     }
  */
-router.get('/connector',(req, res) => {});
+router.get('/connector/:limit', (req, res) => {
+  const param = req.params.limit;
+
+  const response = this.service.listAll(param);
+  res.status(200).json(response);
+});
 
 /**
  *
@@ -78,8 +84,11 @@ router.get('/connector',(req, res) => {});
  *       "error": "NoAccessRight"
  *     }
  */
-router.get('/connector/:id', (req, res) => {
-	return this.service.listBy(id);
+router.get('/connector/:param', (req, res) => {
+  const param = req.params.param;
+  const response = this.service.listBy(param);
+
+  res.status(200).json(response);
 });
 
 /**
@@ -117,7 +126,13 @@ router.get('/connector/:id', (req, res) => {
  *       "error": "NoAccessRight"
  *     }
  */
-router.delete('connector/:id', (req, res) => {});
+router.delete('connector/:id', (req, res) => {
+  const param = req.params.id;
+
+  const response = service.delete(param);
+
+  res.status(200).json(response);
+});
 
 /**
  *
@@ -154,9 +169,13 @@ router.delete('connector/:id', (req, res) => {});
  *       "error": "NoAccessRight"
  *     }
  */
-router.post('/create_connector', (req, res) => {
-	this.connector = body;
-	return this.service.insert(this.connector);
+router.post('/connector', (req, res) => {
+  const data = req.body;
+
+  const connector = AppFactory.connector(data);
+  const response = this.service.insert(connector);
+
+  res.status(201).json(response);
 });
 
 /**
@@ -195,7 +214,13 @@ router.post('/create_connector', (req, res) => {
  *     }
  */
 router.put('connector/:id', (req, res) => {
-	return this.service.update(id, this.connector);
+  const param = req.params.id;
+
+  const body = req.body;
+
+  const response = this.service.update(param, body);
+
+  res.status(201).json(response);
 });
 
 export default router;

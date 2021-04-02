@@ -1,6 +1,5 @@
 export default class ConnectorUseCases {
-  constructor(Connector, Repository) {
-    this.connector = Connector;
+  constructor(Repository) {
     this.repository = Repository;
   }
 
@@ -9,7 +8,7 @@ export default class ConnectorUseCases {
       throw new Error();
     }
 
-    const data = this.repository.insert(connector);
+    const data = this.repository.save(connector);
 
     return {
       ok: 'Insert successed',
