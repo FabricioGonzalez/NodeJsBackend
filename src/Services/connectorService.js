@@ -1,21 +1,28 @@
-
 export default class ConnectorService {
-	constructor(usecase) {
-		this.connectorUsecase = usecase;
-	}
+  constructor(usecase) {
+    this.connectorUsecase = usecase;
+  }
 
-	listAll(){}
+  listAll() {
+    return this.connectorUsecase.listAll();
+  }
 
-	listBy(){}
+  listBy(filter) {
+    return this.connectorUsecase.listBy(filter);
+  }
 
-	save(){}
+  save(connector) {
+    return this.connectorUsecase.save(connector);
+  }
 
-	update()
-	{}
+  update(id) {
+    return this.connectorUsecase.update(id, connector);
+  }
 
-	delete()
-	{
-
-	}
-
+  delete(id) {
+    return this.connectorUsecase.delete(id);
+  }
+  restore(id) {
+    return this.connectorUsecase.restore(id);
+  }
 }

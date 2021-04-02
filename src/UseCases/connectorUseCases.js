@@ -1,56 +1,45 @@
 export default class ConnectorUseCases {
-	constructor(Connector, Repository) {
-		this.connector = Connector;
-		this.repository = Repository;
-	}
+  constructor(Connector, Repository) {
+    this.connector = Connector;
+    this.repository = Repository;
+  }
 
-	data = new Array();
+  save(connector) {
+    if (!connector) {
+      throw new Error();
+    }
 
-	save() {
-		const validConnector = this.connector.validate();
+    const data = this.repository.insert(connector);
 
-		if (validConnector.valid === false) {
-			throw new Error();
-		}
+    return {
+      ok: 'Insert successed',
+      id: data._id,
+    };
+  }
 
-		this.repository.insert(this.connector);
+  listAll() {
+    const data = this.repository.listAll();
 
-		this.data.push(this.connector);
+    return data;
+  }
 
-		return {
-			ok: 'Insert successed',
-			id: this.connector.id,
-		};
-	}
+  listBy(filter) {
+    const data = this.repository.listBy(filter);
+    return data;
+  }
 
-	listAll() {
-		const data = this.repository.listAll();
+  update(connector) {
+    if (!connector) {
+      throw new Error();
+    }
 
-		return data;
-	}
+    return this.repository.update(connector);
+  }
 
-	listBy(filter) {
-		const data = this.repository.listBy(filter);
-		return data;
-	}
-
-	update(connector) {
-		const validConnector = this.connector.validate();
-
-		if (validConnector.valid === false) {
-			throw new Error();
-		}
-
-		return this.repository.update(connector);
-	}
-
-	delete(id) {
-		const validConnector = this.connector.validate();
-
-		if (validConnector.valid === false) {
-			throw new Error();
-		}
-
-		return this.repository.delete(id);
-	}
+  delete(id) {
+    return this.repository.delete(id);
+  }
+  restore(id) {
+    return this.repository.restore(id);
+  }
 }

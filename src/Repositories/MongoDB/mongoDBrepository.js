@@ -35,7 +35,6 @@ export default class MongoDBRepository {
       ...filter,
       Status: 'available',
     });
-    console.log(data);
     return { ok: true, data };
   }
 
@@ -53,6 +52,15 @@ export default class MongoDBRepository {
     const data = await this.model.findByIdAndUpdate(
       id,
       { Status: 'unavailable' },
+      { new: true },
+    );
+    return { ok: true, data };
+  }
+  async restore(id) {
+    const data = await this.model.findByIdAndUpdate(
+      id,
+
+      { Status: 'available' },
       { new: true },
     );
     return { ok: true, data };
