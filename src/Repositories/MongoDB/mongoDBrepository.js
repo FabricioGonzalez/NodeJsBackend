@@ -8,30 +8,30 @@ export default class MongoDBRepository {
   async connect() {
     const connection = mongoose
       .connect(
-        'mongodb+srv://adm:<password>@cluster0.3tji1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+        'mongodb+srv://adm:fabricio@cluster0.3tji1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+        { useUnifiedTopology: true, useNewUrlParser: true },
       )
-      .catch(error);
-    {
-      console.error(error);
-    }
+      .catch(console.error);
 
     return connection;
   }
 
   async save(object) {
-    const data = await this.model.create(object);
-    return data;
+    await this.model.create(object);
+    return true;
   }
 
-  async listAll() {
-    return await this.model.find({
-      where: { status: 'available' },
-    });
+  async listAll(limit) {
+    return await this.model
+      .find({
+        Status: 'available',
+      })
+      .limit(limit);
   }
 
   async listBy({ filter }) {
     return await this.model.find({
-      $where: {
+      where: {
         status: 'available',
         filter,
       },
