@@ -1,0 +1,62 @@
+[
+  {
+    "Name": "CriptoCoin",
+    "Type": "Rest",
+    "Privacy": "Private",
+    "BaseURL": "http://CriptoCoin.com.br",
+    "LogoURL": "http://CriptoCoin.com.br",
+    "Category": "Moeda",
+    "Description": "Lists BitCoin",
+    "Status": "available"
+  },
+  {
+    "Name": "Carston",
+    "Type": "SOAP",
+    "Privacy": "Public",
+    "BaseURL": "http://Carston.io",
+    "LogoURL": "http://Carston.io",
+    "Category": "Cars",
+    "Description": "Lists cars value and models",
+    "Status": "available"
+  },
+  {
+    "Name": "MarsJorney",
+    "Type": "Rest",
+    "Privacy": "Private",
+    "BaseURL": "http://MarsJorney.gov",
+    "LogoURL": "http://MarsJorney.gov",
+    "Category": "Space",
+    "Description": "Shows you about the secrets of space",
+    "Status": "available"
+  },
+  {
+    "Name": "JobHunter",
+    "Type": "Rest",
+    "Privacy": "Private",
+    "BaseURL": "http://JobHunter.com",
+    "LogoURL": "http://JobHunter.com",
+    "Category": "Job",
+    "Description": "You were Fired? Here is your place.",
+    "Status": "available"
+  },
+  {
+    "Name": "Dreams",
+    "Type": "Rest",
+    "Privacy": "Public",
+    "BaseURL": "http://Dreams.com",
+    "LogoURL": "http://Dreams.com",
+    "Category": "Music",
+    "Description": "Lists All singers that exists",
+    "Status": "available"
+  },
+  {
+    "Name": "YourHouse",
+    "Type": "Rest",
+    "Privacy": "Public",
+    "BaseURL": "http://YourHouse.com",
+    "LogoURL": "http://YourHouse.com",
+    "Category": "Houses",
+    "Description": "Lists Rentable Houses",
+    "Status": "available"
+  }
+]

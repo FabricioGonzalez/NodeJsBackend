@@ -1,9 +1,12 @@
+
+
 export default class ConnectorUseCases {
   constructor(Repository) {
     this.repository = Repository;
   }
 
   async save(connector) {
+
     if (!connector) {
       throw new Error();
     }
