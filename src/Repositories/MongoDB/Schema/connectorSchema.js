@@ -36,15 +36,13 @@ const connectorSchema = new Schema(
       type: String,
       required: true,
     },
-  },
-  {
-    timestamps: {
-      createdAt: {
-        type: Date,
-      },
-      updatedAt: {
-        type: Date,
-      },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
     },
   },
 );

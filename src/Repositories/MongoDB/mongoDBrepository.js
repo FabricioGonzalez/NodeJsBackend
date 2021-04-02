@@ -22,43 +22,39 @@ export default class MongoDBRepository {
   }
 
   async listAll(limit) {
-    return await this.model
+    const data = await this.model
       .find({
         Status: 'available',
       })
       .limit(limit);
+    return { ok: true, data };
   }
 
-  async listBy({ filter }) {
-    return await this.model.find({
-      where: {
-        status: 'available',
-        filter,
-      },
+  async listBy(filter) {
+    const data = await this.model.find({
+      ...filter,
+      Status: 'available',
     });
+    console.log(data);
+    return { ok: true, data };
   }
 
   async update(id, object) {
-    await this.model.findOneAndUpdate(
-      {
-        $where: {
-          _id: id,
-        },
-      },
-      { object },
+    const data = await this.model.findByIdAndUpdate(
+      id,
+      { ...object },
       { new: true },
     );
+
+    return { ok: true, data };
   }
 
   async delete(id) {
-    this.model.findOneAndUpdate(
-      {
-        where: {
-          _id: id,
-        },
-      },
-      {},
+    const data = await this.model.findByIdAndUpdate(
+      id,
+      { Status: 'unavailable' },
       { new: true },
     );
+    return { ok: true, data };
   }
 }
