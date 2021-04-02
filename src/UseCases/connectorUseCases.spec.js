@@ -5,33 +5,10 @@ import { jest } from '@jest/globals';
 describe('Connectors UseCases Test suite', () => {
   // Insert Test
   describe('Insert Test Suite', () => {
-    it('should throw an error while inserting invalid connector', () => {
-      const repository = {
-        save: jest.fn((obj) => {
-          return true;
-        }),
-      };
-      const connector = new Connector({
-        id: 1,
-        Name: 'Nov',
-        Type: 'Rest',
-        Privacy: 'Private',
-        BaseURL: 'http://nov.com',
-        LogoURL: 'http://nov.com/logo',
-        Category: 'Business',
-        Description: null,
-        Status: 'available',
-      });
-
-      const connectorUseCases = new ConnectorUseCases(repository);
-
-      expect(connectorUseCases.save).toThrowError();
-    });
-
     it('should be successeful when trying to insert a valid connector', () => {
       const repository = {
-        save: jest.fn((obj) => {
-          return true;
+        save: jest.fn(async (obj) => {
+          return await { ok: true, obj };
         }),
       };
       const connector = new Connector({
@@ -47,16 +24,17 @@ describe('Connectors UseCases Test suite', () => {
       });
 
       const connectorUseCases = new ConnectorUseCases(repository);
-
-      expect(connectorUseCases.save(connector).ok).toBe('Insert successed');
+      return connectorUseCases.save(connector).then((data) => {
+        expect(data.ok).toBe('Insert successed');
+      });
     });
   });
   // List Test
   describe('List Test Suite', () => {
     it('should be successeful when trying to list all connectors', () => {
       const repository = {
-        listAll: jest.fn(() => {
-          return [
+        listAll: jest.fn(async (limit) => {
+          return await [
             {
               id: 1,
               Name: 'Nov',
@@ -88,11 +66,13 @@ describe('Connectors UseCases Test suite', () => {
 
       const connectorUseCases = new ConnectorUseCases(repository);
 
-      expect(connectorUseCases.listAll()).toEqual(expected);
+      return connectorUseCases.listAll().then((data) => {
+        expect(data).toEqual(expected);
+      });
     }),
       it('should be successeful when trying to filter by attribute', () => {
         const repository = {
-          listBy: jest.fn((attribute) => {
+          listBy: jest.fn(async (attribute) => {
             const data = [
               {
                 id: 1,
@@ -140,7 +120,7 @@ describe('Connectors UseCases Test suite', () => {
               },
             ];
 
-            return data.filter((item) => {
+            return await data.filter((item) => {
               for (let i in item) {
                 if (item[i] == attribute) {
                   return item;
@@ -166,24 +146,17 @@ describe('Connectors UseCases Test suite', () => {
           },
         ];
 
-        expect(connectorUseCases.listBy('Public')).toEqual(expected);
+        return connectorUseCases.listBy('Public').then((data) => {
+          expect(data).toEqual(expected);
+        });
       });
   });
 
   // Update Test
   describe('Update Test Suite', () => {
-    it('should throw an error when trying to update with invalid connector data', () => {
-      const repository = {
-        update: jest.fn((data) => {}),
-      };
-
-      const connectorUseCases = new ConnectorUseCases(repository);
-
-      expect(connectorUseCases.update).toThrowError();
-    });
     it('should be successeful when trying to update with valid connector data', () => {
       const repository = {
-        update: jest.fn((data) => {
+        update: jest.fn(async (id, data) => {
           const arr = [
             {
               id: 1,
@@ -200,14 +173,16 @@ describe('Connectors UseCases Test suite', () => {
 
           const result = arr.map((item) => {
             for (const i in item) {
-              if (item[i] !== data[i]) {
-                item[i] = data[i];
+              if (item.id === id) {
+                if (item[i] !== data[i]) {
+                  item[i] = data[i];
+                }
               }
             }
             return item;
           });
 
-          return result;
+          return await result;
         }),
       };
       const connectorUseCases = new ConnectorUseCases(repository);
@@ -226,9 +201,9 @@ describe('Connectors UseCases Test suite', () => {
         },
       ];
 
-      expect(
-        connectorUseCases.update({
-          id: 1,
+      return connectorUseCases
+        .update(1, {
+          id:1,
           Name: 'null',
           Type: 'Rest',
           Privacy: 'Private',
@@ -237,8 +212,10 @@ describe('Connectors UseCases Test suite', () => {
           Category: 'Business',
           Description: 'Ola',
           Status: 'available',
-        }),
-      ).toStrictEqual(expected);
+        })
+        .then((data) => {
+          expect(data).toStrictEqual(expected);
+        });
     });
   });
 
@@ -246,7 +223,7 @@ describe('Connectors UseCases Test suite', () => {
   describe('Delete Test Suite', () => {
     it('should be successeful when trying to delete a valid connector', () => {
       const repository = {
-        delete: jest.fn((id) => {
+        delete: jest.fn(async (id) => {
           const data = [
             {
               id: 1,
@@ -301,7 +278,7 @@ describe('Connectors UseCases Test suite', () => {
             return item;
           });
 
-          return result;
+          return await result;
         }),
       };
       const connectorUseCases = new ConnectorUseCases(repository);
@@ -353,12 +330,14 @@ describe('Connectors UseCases Test suite', () => {
         },
       ];
 
-      expect(connectorUseCases.delete(1)).toEqual(expected);
+      return connectorUseCases.delete(1).then((data) => {
+        expect(data).toEqual(expected);
+      });
     });
 
     it('should be successeful when trying to restore a valid connector unavailable', () => {
       const repository = {
-        restore: jest.fn((id) => {
+        restore: jest.fn(async (id) => {
           const data = [
             {
               id: 1,
@@ -413,7 +392,7 @@ describe('Connectors UseCases Test suite', () => {
             return item;
           });
 
-          return result;
+          return await result;
         }),
       };
 
@@ -465,8 +444,9 @@ describe('Connectors UseCases Test suite', () => {
           Status: 'available',
         },
       ];
-
-      expect(connectorUseCases.restore(1)).toEqual(expected);
+      return connectorUseCases.restore(1).then((data) => {
+        expect(data).toEqual(expected);
+      });
     });
   });
 });

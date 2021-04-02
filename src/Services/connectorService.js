@@ -3,26 +3,31 @@ export default class ConnectorService {
     this.connectorUsecase = usecase;
   }
 
-  listAll() {
-    return this.connectorUsecase.listAll();
+  async listAll(limit) {
+    const data = await this.connectorUsecase.listAll(limit);
+    return data;
   }
 
-  listBy(filter) {
-    return this.connectorUsecase.listBy(filter);
+  async listBy(filter) {
+    const data = await this.connectorUsecase.listBy(filter);
+    return data;
   }
 
-  save(connector) {
-    return this.connectorUsecase.save(connector);
+  async save(connector) {
+    return await this.connectorUsecase.save(connector);
   }
 
-  update(id) {
-    return this.connectorUsecase.update(id, connector);
+  async update(id, connector) {
+    const data = await this.connectorUsecase.update(id, connector);
+    return data;
   }
 
-  delete(id) {
-    return this.connectorUsecase.delete(id);
+  async delete(id) {
+    const data = await this.connectorUsecase.delete(id);
+    return data;
   }
-  restore(id) {
-    return this.connectorUsecase.restore(id);
+  async restore(id) {
+    const data = await this.connectorUsecase.restore(id);
+    return data;
   }
 }

@@ -1,20 +1,16 @@
 import jwt from 'jsonwebtoken';
 
-export default class JWT {
-	sign(secret) {
-		const token = jwt.sign({ secret }, process.env.SECRET, {
-			expiresIn: 360,
-		});
+class JWT {
+  sign(key) {
+    const token = jwt.sign({ key }, process.env.SECRET, {
+      expiresIn: 360,
+    });
 
-		return { auth: true, token: token };
-	}
-	verify(token, id) {
-		jwt.verify(token, process.env.SECRET, (err, decoded) => {
-			if (err) {
-				return { auth: false, message: 'Failed to authenticate token.' };
-			}
-
-			id = decoded.id;
-		});
-	}
+    return { auth: true, token: token };
+  }
+  verify(token) {
+    jwt.verify(token, process.env.SECRET);
+  }
 }
+
+export default JWT;

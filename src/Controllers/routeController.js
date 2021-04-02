@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import JWT from './JWT/jwt.js';
 import AppFactory from '../Factory/appFactory.js';
+import jwtMiddleware from './JWT/jwtMiddleware.js';
 
 const jwt = new JWT();
 const router = Router();
 const appService = new AppFactory();
-const service = appService.factory();
+appService.connect();
 
 /**
  *
@@ -42,11 +43,18 @@ const service = appService.factory();
  *       "error": "NoAccessRight"
  *     }
  */
-router.get('/connector/:limit', (req, res) => {
-  const param = req.params.limit;
 
-  const response = this.service.listAll(param);
-  res.status(200).json(response);
+router.get('/connector/:limit', jwtMiddleware, async (req, res) => {
+  console.log(req.key);
+  const param = Number(req.params.limit);
+
+  const { data } = await appService.ConnectorService.listAll(param);
+  res.status(200).json(data);
+});
+router.get('/connector', jwtMiddleware, async (req, res) => {
+  console.log(req.key);
+  const { data } = await appService.ConnectorService.listAll();
+  res.status(200).json(data);
 });
 
 /**
@@ -84,11 +92,11 @@ router.get('/connector/:limit', (req, res) => {
  *       "error": "NoAccessRight"
  *     }
  */
-router.get('/connector/:param', (req, res) => {
+router.get('/connector/filter/:param', jwtMiddleware, async (req, res) => {
   const param = req.params.param;
-  const response = this.service.listBy(param);
+  const response = await appService.ConnectorService.listBy(param);
 
-  res.status(200).json(response);
+  res.status(200).json(response.data);
 });
 
 /**
@@ -126,12 +134,12 @@ router.get('/connector/:param', (req, res) => {
  *       "error": "NoAccessRight"
  *     }
  */
-router.delete('connector/:id', (req, res) => {
-  const param = req.params.id;
+router.delete('/connector/:id', jwtMiddleware, async (req, res) => {
+  const param = String(req.params.id);
 
-  const response = service.delete(param);
+  const response = await appService.ConnectorService.delete(param);
 
-  res.status(200).json(response);
+  res.status(200).json(response.data);
 });
 
 /**
@@ -169,13 +177,12 @@ router.delete('connector/:id', (req, res) => {
  *       "error": "NoAccessRight"
  *     }
  */
-router.post('/connector', (req, res) => {
-  const data = req.body;
+router.post('/connector', jwtMiddleware, async (req, res) => {
+  const body = req.body;
+  const { ok, data } = await appService.ConnectorService.save(body);
+  console.log(data);
 
-  const connector = AppFactory.connector(data);
-  const response = this.service.insert(connector);
-
-  res.status(201).json(response);
+  res.status(201).json({ response: ok, data });
 });
 
 /**
@@ -213,14 +220,44 @@ router.post('/connector', (req, res) => {
  *       "error": "NoAccessRight"
  *     }
  */
-router.put('connector/:id', (req, res) => {
+router.put('/connector/:id', jwtMiddleware, async (req, res) => {
   const param = req.params.id;
 
   const body = req.body;
 
-  const response = this.service.update(param, body);
+  const response = await appService.ConnectorService.update(param, body);
 
-  res.status(201).json(response);
+  res.status(201).json(response.data);
+});
+
+router.get('/connector/restore/:id', jwtMiddleware, async (req, res) => {
+  const param = req.params.id;
+
+  const response = await appService.ConnectorService.restore(param);
+
+  res.status(201).json(response.data);
+});
+
+router.post('/app/generate_key/', jwtMiddleware, async (req, res) => {
+  const body = req.body;
+
+  const response = await appService.MongoDBRepository.generateKey(body);
+
+  res.status(201).json(response.data);
+});
+
+router.post('/app/auth/', async (req, res) => {
+  const body = req.body;
+
+  const response = await appService.MongoDBRepository.compareKey(body);
+
+  const { data } = response;
+
+  const token = jwt.sign(data.Key);
+
+  res
+    .status(201)
+    .json({ message: 'Autenticado com sucesso', data: response.data, token });
 });
 
 export default router;

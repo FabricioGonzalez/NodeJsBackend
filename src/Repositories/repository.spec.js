@@ -28,7 +28,16 @@ describe('Repositories Tests Suite', () => {
     });
     describe('List All Test', () => {
       it('should listAll data, no validation required', () => {
-        return MongoDB.listAll().then(({ ok, data }) => {
+        return MongoDB.listAll().then(({ ok }) => {
+          expect(ok).toBeTruthy();
+        });
+      });
+    });
+
+    describe('List with Limit Test', () => {
+      it('should List One data, no validation required', () => {
+        return MongoDB.listAll(1).then(({ ok, data }) => {
+          console.log(data);
           expect(ok).toBeTruthy();
         });
       });
@@ -36,7 +45,7 @@ describe('Repositories Tests Suite', () => {
 
     describe('List One Test', () => {
       it('should List One data, no validation required', () => {
-        return MongoDB.listBy({ Type: 'Rest' }).then(({ ok, data }) => {
+        return MongoDB.listBy({ Type: 'Rest' }).then(({ ok }) => {
           expect(ok).toBeTruthy();
         });
       });
@@ -44,7 +53,7 @@ describe('Repositories Tests Suite', () => {
 
     describe('Update Test', () => {
       it('should Update data, no validation required', () => {
-        return MongoDB.update('60669945eac6dc45e5d2d173', {
+        return MongoDB.update('606776344f1faa10b8cdcbfb', {
           Name: 'Data',
           Type: 'SOAP',
           Privacy: 'Public',
@@ -69,12 +78,18 @@ describe('Repositories Tests Suite', () => {
 
     describe('App Key Test', () => {
       it('should generate a key', () => {
-        return MongoDB.generateKey('oi', 'key1234').then((data) => {
-          expect(data).toBeTruthy();
-        });
+        return MongoDB.generateKey({ Name: 'oi', Key: 'key1234' }).then(
+          (data) => {
+            expect(data).toBeTruthy();
+          },
+        );
       });
       it('should compare key', () => {
-        return MongoDB.compareKey('606741b9f52f592134a257ee', 'key1234').then((data) => {
+        return MongoDB.compareKey({
+          Id: '606774332d3eeb2eb0aa0a71',
+          Key: '4564fsasf58grw',
+        }).then((data) => {
+          console.log(data);
           expect(data.ok).toBeTruthy();
         });
       });

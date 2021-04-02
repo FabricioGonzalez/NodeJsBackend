@@ -3,42 +3,43 @@ export default class ConnectorUseCases {
     this.repository = Repository;
   }
 
-  save(connector) {
+  async save(connector) {
     if (!connector) {
       throw new Error();
     }
 
-    const data = this.repository.save(connector);
+    const { data } = await this.repository.save(connector);
 
     return {
       ok: 'Insert successed',
-      id: data._id,
+      data,
     };
   }
 
-  listAll() {
-    const data = this.repository.listAll();
+  async listAll(limit) {
+    const data = await this.repository.listAll(limit);
 
     return data;
   }
 
-  listBy(filter) {
-    const data = this.repository.listBy(filter);
+  async listBy(filter) {
+    const data = await this.repository.listBy(filter);
+
     return data;
   }
 
-  update(connector) {
+  async update(id, connector) {
     if (!connector) {
       throw new Error();
     }
 
-    return this.repository.update(connector);
+    return await this.repository.update(id, connector);
   }
 
-  delete(id) {
-    return this.repository.delete(id);
+  async delete(id) {
+    return await this.repository.delete(id);
   }
-  restore(id) {
-    return this.repository.restore(id);
+  async restore(id) {
+    return await this.repository.restore(id);
   }
 }

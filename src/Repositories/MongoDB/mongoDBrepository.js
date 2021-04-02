@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default class MongoDBRepository {
   constructor(ConnectorModel, ApplicationModel) {
@@ -9,18 +12,21 @@ export default class MongoDBRepository {
 
   async connect() {
     const connection = mongoose
-      .connect(
-        'mongodb+srv://adm:fabricio@cluster0.3tji1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-        { useUnifiedTopology: true, useNewUrlParser: true },
-      )
+      .connect(process.env.MONGO, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+      })
       .catch(console.error);
 
     return connection;
   }
 
   async save(object) {
-    await this.model.create(object);
-    return true;
+    /*  if (!!(await this.model.findOne({ Name: object.Name }))) {
+      return false;
+    } */
+    const data = await this.model.create(object);
+    return { ok: true, data };
   }
 
   async listAll(limit) {
@@ -67,26 +73,31 @@ export default class MongoDBRepository {
     return { ok: true, data };
   }
 
-  async generateKey(key, name) {
-    const rounds = 10;
-
-    const encripted = bcrypt.hashSync(key, rounds);
-
-    const obj = { Name: name, Key: encripted };
-
-    console.log(obj);
-
-    await this.appModel.create(obj);
-
-    return true;
+  async listApp(limit) {
+    const data = await this.appModel.find().limit(limit);
+    return { ok: true, data };
   }
 
-  async compareKey(id, key) {
-    const data = this.appModel.findById(id);
-    const result = bcrypt.compareSync(key, data.Key);
+  async generateKey({ Name, Key }) {
+    const rounds = 10;
 
-    if (result == true) {
-      return { ok: true, data };
-    }
+    const encrypted = bcrypt.hashSync(Key, rounds);
+
+    const obj = { Name: Name, Key: (Key = encrypted) };
+    /* 
+    if (!!(await this.appModel.findOne({ Name: name }))) {
+      return false;
+    } */
+    const data = await this.appModel.create(obj);
+
+    return { ok: true, data: data._id };
+  }
+
+  async compareKey({ Id, Key }) {
+    const data = await this.appModel.findById(Id);
+
+    const result = await bcrypt.compare(Key, data.Key);
+
+    if (result === true) return { ok: true, data };
   }
 }
